@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service(value = "employeeService")
 public class EmployeeService {
@@ -22,11 +24,30 @@ public class EmployeeService {
         return employeeRepoMongoDB.findAll();
     }
 
-    public void insertEmployee(Employee employee) {
-        employeeRepoMongoDB.save(employee);
+    public Employee insertEmployee(Employee employee) {
+          Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(employee.getEmail());
+          if (targetEmployee != null) {
+              return null;
+          }
+        UUID newID = UUID.randomUUID();
+        employee.setId(newID);
+        return employeeRepoMongoDB.save(employee);
     }
 
-    public List<Employee> searchEmployeesByName(String name) {
-          return this.employeeRepoMongoDB.findByFirstName(name);
+    public Optional<Employee> searchEmployeeById(UUID id) {
+          return this.employeeRepoMongoDB.findById(id);
+    }
+
+    public Optional<Employee> searchEmployeeByEmail(String email) {
+        return this.employeeRepoMongoDB.findByEmail(email);
+    }
+
+    public Optional<Employee> updateEmployeeByEmail(String email) {
+          Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(email);
+          if (targetEmployee == null) {
+
+          }
+
+          return null;
     }
 }

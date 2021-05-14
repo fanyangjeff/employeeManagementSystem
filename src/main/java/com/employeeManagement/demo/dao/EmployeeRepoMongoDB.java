@@ -5,9 +5,12 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository(value = "employeeRepoMongoDB")
-public interface EmployeeRepoMongoDB extends MongoRepository<Employee, String> {
-    List<Employee> findByFirstName(String name);
-    List<Employee> searchByName(String name);
+public interface EmployeeRepoMongoDB extends MongoRepository<Employee, UUID> {
+    Optional<Employee> findById(UUID id);
+    Optional<Employee> findByEmail(String email);
+
 }

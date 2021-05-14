@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/v1/api")
@@ -19,20 +21,22 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-
     @GetMapping(value = "/getAll")
     public List<Employee> getAllEmployees() {
         return this.employeeService.getAll();
     }
+    @GetMapping(value = "/searchByEmail")
+    public Optional<Employee> getEmployeeByEmail(@RequestParam String email) {
+        return this.employeeService.searchEmployeeByEmail(email);
+    }
 
-    @GetMapping(value = "/searchByName/{name}")
-    public List<Employee> searchByName(@PathVariable String name) {
-        return this.employeeService.searchEmployeesByName(name);
+    @GetMapping(value = "/searchById")
+    public Optional<Employee> getEmployeeById(@RequestParam UUID id) {
+        return this.employeeService.searchEmployeeById(id);
     }
 
     @PostMapping(value = "/insertEmployee")
     public Employee insertEmployee(@RequestBody Employee employee) {
-        this.employeeService.insertEmployee(employee);
-        return employee;
+        return this.employeeService.insertEmployee(employee);
     }
 }
