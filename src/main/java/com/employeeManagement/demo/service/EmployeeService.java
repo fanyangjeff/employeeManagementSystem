@@ -24,14 +24,15 @@ public class EmployeeService {
         return employeeRepoMongoDB.findAll();
     }
 
-    public Employee insertEmployee(Employee employee) {
+    public String insertEmployee(Employee employee) {
           Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(employee.getEmail());
-          if (targetEmployee != null) {
-              return null;
+          if (targetEmployee.isPresent()) {
+              return "email has been registered";
           }
         UUID newID = UUID.randomUUID();
         employee.setId(newID);
-        return employeeRepoMongoDB.save(employee);
+        employeeRepoMongoDB.save(employee);
+        return "employee added";
     }
 
     public Optional<Employee> searchEmployeeById(UUID id) {
@@ -42,12 +43,31 @@ public class EmployeeService {
         return this.employeeRepoMongoDB.findByEmail(email);
     }
 
-    public Optional<Employee> updateEmployeeByEmail(String email) {
-          Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(email);
-          if (targetEmployee == null) {
-
+    public String updateEmployeeByEmail(Employee employee) {
+          Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(employee.getEmail());
+          if (!targetEmployee.isPresent()) {
+              return employee.getEmail() + " has not been registered";
           }
+          employee.setId(targetEmployee.get().getId());
+          this.employeeRepoMongoDB.save(employee);
+          return "updated successfully";
+    }
 
-          return null;
+    public Optional<Employee> deleteEmployeeById(UUID id) {
+          Optional<Employee> targetEmployee= this.employeeRepoMongoDB.findById(id);
+          if (!targetEmployee.isPresent()) {
+              return null;
+          }
+          this.employeeRepoMongoDB.deleteById(id);
+          return targetEmployee;
+    }
+
+    public Optional<Employee> deleteEmployeeByEmail(String email) {
+          Optional<Employee> targetEmployee = this.employeeRepoMongoDB.findByEmail(email);
+          if (!targetEmployee.isPresent()) {
+              return null;
+          }
+          this.employeeRepoMongoDB.deleteByEmail(email);
+          return targetEmployee;
     }
 }

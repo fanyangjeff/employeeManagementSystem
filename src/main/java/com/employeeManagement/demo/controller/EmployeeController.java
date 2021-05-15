@@ -21,10 +21,16 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @PostMapping(value = "/insertEmployee")
+    public String insertEmployee(@RequestBody Employee employee) {
+        return this.employeeService.insertEmployee(employee);
+    }
+
     @GetMapping(value = "/getAll")
     public List<Employee> getAllEmployees() {
         return this.employeeService.getAll();
     }
+
     @GetMapping(value = "/searchByEmail")
     public Optional<Employee> getEmployeeByEmail(@RequestParam String email) {
         return this.employeeService.searchEmployeeByEmail(email);
@@ -35,8 +41,19 @@ public class EmployeeController {
         return this.employeeService.searchEmployeeById(id);
     }
 
-    @PostMapping(value = "/insertEmployee")
-    public Employee insertEmployee(@RequestBody Employee employee) {
-        return this.employeeService.insertEmployee(employee);
+    @PutMapping(value = "/updateByEmail")
+    public String updateEmployeeByEmail(@RequestBody Employee employee) {
+        return this.employeeService.updateEmployeeByEmail(employee);
     }
+
+    @DeleteMapping(value = "/deleteById")
+    public Optional<Employee> deleteEmployeeById(@RequestParam UUID id) {
+        return this.employeeService.deleteEmployeeById(id);
+    }
+
+    @DeleteMapping(value = "/deleteByEmail")
+    public Optional<Employee> deleteEmployeeByEmail(@RequestParam String email) {
+        return this.employeeService.deleteEmployeeByEmail(email);
+    }
+
 }

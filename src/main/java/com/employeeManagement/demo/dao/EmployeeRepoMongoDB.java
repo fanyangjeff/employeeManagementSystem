@@ -12,5 +12,6 @@ import java.util.UUID;
 public interface EmployeeRepoMongoDB extends MongoRepository<Employee, UUID> {
     Optional<Employee> findById(UUID id);
     Optional<Employee> findByEmail(String email);
-
+    //void deleteById(UUID UUID);  exists by default
+    void deleteByEmail(String email);
 }
